@@ -1,9 +1,13 @@
 import actionsTypes from "./actionsTypes";
 export default {
-  loading(state) {
+  loading() {
     return {
-      type: actionsTypes.APP_LOADING,
-      state
+      type: actionsTypes.APP_LOADING
+    };
+  },
+  loadingOff() {
+    return {
+      type: actionsTypes.APP_LOADING_OFF
     };
   }
 };

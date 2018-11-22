@@ -1,0 +1,8 @@
+//Categories actionTypes
+
+export default {
+  CATEGORIES_LOADING: "@categories/CATEGORIES_LOADING",
+  CATEGORIES_LOADED: "@categories/CATEGORIES_LOADED",
+  CATEGORIES_RECIVED: "@categories/CATEGORIES_RECIVED",
+  CATEGORIES_RECIVED_ERROR: "@categories/CATEGORIES_RECIVED_ERROR"
+};

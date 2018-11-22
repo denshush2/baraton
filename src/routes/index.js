@@ -4,14 +4,14 @@ import { Provider } from "react-redux";
 
 import store from "../store";
 import Home from "../components/Home/Home";
+import Section from "../components/Section/Section";
 
-console.log("store", store);
 const Routes = () => (
   <Provider store={store}>
     <Router>
       <Switch>
         {/* <Route path="/" exact render={props => <Home {...props} />} /> */}
-        <Route path="/" exact component={Home} />
+        <Route path="/" component={Home} />
       </Switch>
     </Router>
   </Provider>
