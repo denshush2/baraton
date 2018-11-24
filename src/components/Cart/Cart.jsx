@@ -2,16 +2,38 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Sidebar, Menu, Item } from "semantic-ui-react";
+import actions from "../../store/modules/cart/actions";
 import CartItem from "../CartItem/CartItem";
 import "./styles.scss";
+import { parse } from "uri-js";
 
 export class Cart extends Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
     toggleCartBar: PropTypes.func.isRequired
   };
-  addProductInCart = id => {};
-  removeProductInCart = id => {};
+  addProductInCart = id => {
+    this.props.addOne(id);
+    this.forceUpdate();
+  };
+  componentDidMount() {
+    let storage = JSON.parse(localStorage.getItem("Cart"));
+    if (storage) {
+      this.props.updateStore(storage);
+    }
+  }
+  removeOneProductInCart = id => {
+    this.props.removeOne(id);
+    this.forceUpdate();
+  };
+  removeProductInCart = id => {
+    this.props.removeProduct(id);
+    this.forceUpdate();
+  };
+  componentDidUpdate() {
+    console.log("update");
+    localStorage.setItem("Cart", JSON.stringify(this.props.cartItems));
+  }
   render() {
     const { isOpen, cartItems, toggleCartBar } = this.props;
     return (
@@ -34,6 +56,7 @@ export class Cart extends Component {
                 <CartItem
                   key={item.id}
                   addOne={this.addProductInCart}
+                  removeProduct={this.removeProductInCart}
                   deleteOne={this.removeProductInCart}
                   {...item}
                 />
@@ -63,7 +86,22 @@ const mapStateToProps = state => ({
   cartItems: state.CartReducer.cart
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = dispatch => {
+  return {
+    addOne: id => {
+      dispatch(actions.addOneToCart(id));
+    },
+    removeOne: id => {
+      dispatch(actions.deleteOneFromCart(id));
+    },
+    updateStore: store => {
+      dispatch(actions.updateStore(store));
+    },
+    removeProduct: id => {
+      dispatch(actions.removeProductFromCart(id));
+    }
+  };
+};
 
 export default connect(
   mapStateToProps,
