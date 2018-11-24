@@ -7,7 +7,15 @@ export default class CartItem extends Component {
     console.log(this);
   }
   render() {
-    const { id, name, addOne, removeOne, price, quantity } = this.props;
+    const {
+      id,
+      name,
+      removeProduct,
+      addOne,
+      deleteOne,
+      price,
+      quantity
+    } = this.props;
     return (
       <>
         <Item>
@@ -18,8 +26,9 @@ export default class CartItem extends Component {
               <div>
                 <Button
                   onClick={() => {
-                    addOne(id);
+                    deleteOne(id);
                   }}
+                  disabled={quantity === 1}
                   color="red"
                   basic
                   attached="left"
@@ -28,13 +37,21 @@ export default class CartItem extends Component {
                 </Button>
                 <Button
                   onClick={() => {
-                    removeOne(id);
+                    addOne(id);
                   }}
                   color="green"
                   basic
                   attached="right"
                 >
                   +
+                </Button>
+                <Button
+                  onClick={() => {
+                    removeProduct(id);
+                  }}
+                  color="red"
+                >
+                  Remove
                 </Button>
               </div>
             </Item.Content>
