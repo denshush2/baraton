@@ -13,7 +13,7 @@ function* getAllProducts() {
     let filterData = {
       id: 0
     };
-    yield put(actions.filterProductsStart(filterData));
+    yield put(actions.setupCategories());
   } catch (e) {
     yield put(actions.loadAllProductsError);
   }

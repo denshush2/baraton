@@ -7,21 +7,65 @@ class Subsection extends Component {
   componentDidMount() {
     console.log(this);
   }
-  addProduct = product => {
-    this.props.addProductToCart(product);
-    console.log("Add Product", product);
+  componentDidUpdate() {
+    console.log("SUBSECTION UPDATE");
+  }
+  renderProducts = products => {
+    if (
+      this.props.filters.inStock === null &&
+      this.props.filters.priceFrom === 0 &&
+      this.props.filters.priceTo === 20000 &&
+      this.props.filters.inStockFrom === 0 &&
+      this.props.filters.inStockTo === 1000
+    ) {
+      return products.map(product => {
+        return (
+          <Product
+            key={product.id}
+            addProduct={this.props.addProduct}
+            {...product}
+          />
+        );
+      });
+    } else {
+      const filtered = products.filter(product => {
+        console.log(this.props.filters.inStock, product);
+        let price = parseFloat(product.price.substr(1).replace(",", "."));
+        if (
+          this.props.filters.inStock === product.available &&
+          this.props.filters.priceTo > price &&
+          this.props.filters.priceFrom < price &&
+          this.props.filters.inStockTo > product.quantity &&
+          this.props.filters.inStockFrom < product.quantity
+        ) {
+          console.log("FIND");
+          return product;
+        }
+      });
+      console.log("FILTEREd", filtered);
+      return filtered.map(product => {
+        return (
+          <Product key={product.id} addProduct={this.addProduct} {...product} />
+        );
+      });
+    }
   };
   render() {
-    const { name, products, sublevels } = this.props;
+    const {
+      name,
+      renderProducts,
+      products,
+      sublevels,
+      addProduct
+    } = this.props;
     return (
       <>
         <h3>{name}</h3>
         <Card.Group>
-          {products.map(item => {
-            return (
-              <Product key={item.id} addProduct={this.addProduct} {...item} />
-            );
-          })}
+          {this.renderProducts(products)}
+          {/* {products.map(item => {
+            return <Product key={item.id} addProduct={addProduct} {...item} />;
+          })} */}
         </Card.Group>
       </>
     );
@@ -30,11 +74,7 @@ class Subsection extends Component {
 const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => {
-  return {
-    addProductToCart(product) {
-      dispatch(CartActions.addToCart(product));
-    }
-  };
+  return {};
 };
 
 export default connect(
