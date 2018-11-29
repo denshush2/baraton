@@ -1,36 +1,51 @@
 import _ from "lodash";
+import { find } from "object-deep-search";
 
 export default {
   filterProductsBySection(products, { id, filters, categories }) {
     //Setup All Products
-    console.log("Setup all products", filters);
-    if (id === 0) {
-      console.log("ALL PRODUCTS");
-      return products;
-    }
     let response = {};
-    if (filters.isSublevel === false) {
-      for (let i = 0; i < categories.length; i++) {
-        if (categories[i].id === id) {
-          response = this.setupProducts(categories[i], products);
-          categories[i].products = [];
-        }
+    for (let i = 0; i < categories.length; i++) {
+      if (categories[i].id === id) {
+        response = this.setupProducts(categories[i], products);
+        categories[i].products = [];
       }
-    } else {
-      console.log(id, categories);
-      console.log("BEFORE", categories, id);
-      categories = _(categories)
-        .thru(function(coll) {
-          return _.union(coll, _.map(coll, "sublevels"));
-        })
-        .flatten()
-        .find({ id: id });
-      console.log("SOME DATA", categories);
-      // response = this.setupProducts(categories, products);
     }
+    console.log("FILTER", id);
+    const filter = {
+      id: id,
+      isSublevel: filters.isSublevel
+    };
+    let results = find(categories, filter)[0];
+    console.log("results", results);
+    // console.log("Setup all products", filters);
+    // if (id === 0) {
+    //   console.log("ALL PRODUCTS");
+    //   return products;
+    // }
+    // let response = {};
+    // if (filters.isSublevel === false) {
+    //
+    // } else {
+    //   console.log(id, categories);
+    //   console.log("BEFORE", categories, id);
+    //   let filters = {
+    //     id: 3
+    //   };
+    //   let results = find(categories, filters);
+    //   console.log("results", results);
+    //   // categories = _(categories)
+    //   //   .thru(function(coll) {
+    //   //     return _.union(coll, _.map(coll, "sublevels"));
+    //   //   })
+    //   //   .flatten()
+    //   //   .find({ id: id });
+    //   console.log("SOME DATA", categories);
+    //   // response = this.setupProducts(categories, products);
+    // }
 
-    console.log("categories", response);
-    return response;
+    // console.log("categories", response);
+    return results;
   },
   setupProducts(categories, products, sublevel = false) {
     categories.products = [];

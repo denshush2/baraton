@@ -13,7 +13,6 @@ import Section from "../Section/Section";
 
 class Home extends Component {
   componentDidMount() {
-    console.log("mounted", this);
     this.props.getAllProducts();
   }
   state = {
@@ -32,7 +31,7 @@ class Home extends Component {
   };
   render() {
     const { sideBarOpen, cartBarOpen } = this.state;
-    const { loading } = this.props;
+    const { loading, location } = this.props;
     return (
       <>
         <Sidebar.Pushable as={Segment} className={"Home"}>
@@ -47,6 +46,9 @@ class Home extends Component {
               toggleSideBar={this.toggleSideBar}
               toggleCartBar={this.toggleCartBar}
             />
+            {location.pathname === "/" && (
+              <Section location={{ state: { id: 0, isSublevel: false } }} />
+            )}
             {loading === true && (
               <Dimmer active>
                 <Loader />

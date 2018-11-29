@@ -42,6 +42,12 @@ export default {
       type: actionTypes.PRODUCTS_SET_CATEGORIES_LIST,
       payload: categories
     };
+  },
+  setupCategories(categories) {
+    return {
+      type: actionTypes.PRODUCTS_SETUP_PRODUCTS,
+      payload: categories
+    };
   }
   // filterProducts(data) {
   //   return {
